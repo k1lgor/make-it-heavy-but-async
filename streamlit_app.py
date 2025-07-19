@@ -351,29 +351,47 @@ class StreamlitApp:
             start_time = time.time()
             progress_placeholder.progress(0.1, "🚀 Initializing async agent...")
 
-            async with AsyncOpenRouterAgent(silent=True) as agent:
-                progress_placeholder.progress(0.3, "🔄 Processing your request...")
+            # Create a temporary config file with session API key
+            temp_config = self.config.copy()
+            temp_config["openrouter"]["api_key"] = st.session_state.get("api_key", "")
 
-                result = await agent.run(user_input)
-                execution_time = time.time() - start_time
+            # Save temporary config
+            temp_config_path = "temp_config_streamlit.yaml"
+            with open(temp_config_path, "w") as f:
+                yaml.dump(temp_config, f, default_flow_style=False, indent=2)
 
-                progress_placeholder.progress(1.0, "✅ Complete!")
+            try:
+                async with AsyncOpenRouterAgent(
+                    config_path=temp_config_path, silent=True
+                ) as agent:
+                    progress_placeholder.progress(0.3, "🔄 Processing your request...")
 
-                # Display result
-                output_placeholder.markdown(
-                    f"""
-                <div class="success-box">
-                    <h3>🤖 Agent Response:</h3>
-                    <p>{result}</p>
-                </div>
-                """,
-                    unsafe_allow_html=True,
-                )
+                    result = await agent.run(user_input)
+                    execution_time = time.time() - start_time
 
-                # Return metrics
-                metrics = agent.get_metrics()
-                metrics["execution_time"] = execution_time
-                return metrics
+                    progress_placeholder.progress(1.0, "✅ Complete!")
+
+                    # Display result
+                    output_placeholder.markdown(
+                        f"""
+                    <div class="success-box">
+                        <h3>🤖 Agent Response:</h3>
+                        <p>{result}</p>
+                    </div>
+                    """,
+                        unsafe_allow_html=True,
+                    )
+
+                    # Return metrics
+                    metrics = agent.get_metrics()
+                    metrics["execution_time"] = execution_time
+                    return metrics
+            finally:
+                # Clean up temporary config file
+                import os
+
+                if os.path.exists(temp_config_path):
+                    os.remove(temp_config_path)
 
         except Exception as e:
             progress_placeholder.empty()
@@ -394,32 +412,46 @@ class StreamlitApp:
             start_time = time.time()
             progress_placeholder.progress(0.1, "🔄 Initializing sync agent...")
 
-            agent = OpenRouterAgent(silent=True)
-            progress_placeholder.progress(0.3, "🔄 Processing your request...")
+            # Create a temporary config file with session API key
+            temp_config = self.config.copy()
+            temp_config["openrouter"]["api_key"] = st.session_state.get("api_key", "")
 
-            result = agent.run(user_input)
-            execution_time = time.time() - start_time
+            # Save temporary config
+            temp_config_path = "temp_config_streamlit.yaml"
+            with open(temp_config_path, "w") as f:
+                yaml.dump(temp_config, f, default_flow_style=False, indent=2)
 
-            progress_placeholder.progress(1.0, "✅ Complete!")
+            try:
+                agent = OpenRouterAgent(config_path=temp_config_path, silent=True)
+                progress_placeholder.progress(0.3, "🔄 Processing your request...")
 
-            # Display result
-            output_placeholder.markdown(
-                f"""
-            <div class="success-box">
-                <h3>🤖 Agent Response:</h3>
-                <p>{result}</p>
-            </div>
-            """,
-                unsafe_allow_html=True,
-            )
+                result = agent.run(user_input)
+                execution_time = time.time() - start_time
 
-            # Return basic metrics
-            return {
-                "execution_time": execution_time,
-                "tool_calls": 0,  # Sync agent doesn't track this
-                "cache_hits": 0,
-                "llm_calls": 0,
-            }
+                progress_placeholder.progress(1.0, "✅ Complete!")
+
+                # Display result
+                output_placeholder.markdown(
+                    f"""
+                <div class="success-box">
+                    <h3>🤖 Agent Response:</h3>
+                    <p>{result}</p>
+                </div>
+                """,
+                    unsafe_allow_html=True,
+                )
+
+                # Return basic metrics
+                return {
+                    "execution_time": execution_time,
+                    "tool_calls": 0,  # Sync agent doesn't track this
+                    "cache_hits": 0,
+                    "llm_calls": 0,
+                }
+            finally:
+                # Clean up temporary config file
+                if os.path.exists(temp_config_path):
+                    os.remove(temp_config_path)
 
         except Exception as e:
             progress_placeholder.empty()
@@ -442,29 +474,45 @@ class StreamlitApp:
             start_time = time.time()
             progress_placeholder.progress(0.1, "🚀 Initializing async orchestrator...")
 
-            orchestrator = AsyncTaskOrchestrator(silent=True)
-            progress_placeholder.progress(0.3, "🔄 Running multi-agent analysis...")
+            # Create a temporary config file with session API key
+            temp_config = self.config.copy()
+            temp_config["openrouter"]["api_key"] = st.session_state.get("api_key", "")
 
-            result = await orchestrator.orchestrate(user_input)
-            execution_time = time.time() - start_time
+            # Save temporary config
+            temp_config_path = "temp_config_streamlit.yaml"
+            with open(temp_config_path, "w") as f:
+                yaml.dump(temp_config, f, default_flow_style=False, indent=2)
 
-            progress_placeholder.progress(1.0, "✅ Complete!")
+            try:
+                orchestrator = AsyncTaskOrchestrator(
+                    config_path=temp_config_path, silent=True
+                )
+                progress_placeholder.progress(0.3, "🔄 Running multi-agent analysis...")
 
-            # Display result
-            output_placeholder.markdown(
-                f"""
-            <div class="success-box">
-                <h3>🔀 Orchestrator Response:</h3>
-                <p>{result}</p>
-            </div>
-            """,
-                unsafe_allow_html=True,
-            )
+                result = await orchestrator.orchestrate(user_input)
+                execution_time = time.time() - start_time
 
-            # Return metrics
-            metrics = orchestrator.get_metrics()
-            metrics["execution_time"] = execution_time
-            return metrics
+                progress_placeholder.progress(1.0, "✅ Complete!")
+
+                # Display result
+                output_placeholder.markdown(
+                    f"""
+                <div class="success-box">
+                    <h3>🔀 Orchestrator Response:</h3>
+                    <p>{result}</p>
+                </div>
+                """,
+                    unsafe_allow_html=True,
+                )
+
+                # Return metrics
+                metrics = orchestrator.get_metrics()
+                metrics["execution_time"] = execution_time
+                return metrics
+            finally:
+                # Clean up temporary config file
+                if os.path.exists(temp_config_path):
+                    os.remove(temp_config_path)
 
         except Exception as e:
             progress_placeholder.empty()
@@ -487,32 +535,48 @@ class StreamlitApp:
             start_time = time.time()
             progress_placeholder.progress(0.1, "🔄 Initializing sync orchestrator...")
 
-            orchestrator = TaskOrchestrator(silent=True)
-            progress_placeholder.progress(0.3, "🔄 Running multi-agent analysis...")
+            # Create a temporary config file with session API key
+            temp_config = self.config.copy()
+            temp_config["openrouter"]["api_key"] = st.session_state.get("api_key", "")
 
-            result = orchestrator.orchestrate(user_input)
-            execution_time = time.time() - start_time
+            # Save temporary config
+            temp_config_path = "temp_config_streamlit.yaml"
+            with open(temp_config_path, "w") as f:
+                yaml.dump(temp_config, f, default_flow_style=False, indent=2)
 
-            progress_placeholder.progress(1.0, "✅ Complete!")
+            try:
+                orchestrator = TaskOrchestrator(
+                    config_path=temp_config_path, silent=True
+                )
+                progress_placeholder.progress(0.3, "🔄 Running multi-agent analysis...")
 
-            # Display result
-            output_placeholder.markdown(
-                f"""
-            <div class="success-box">
-                <h3>🔀 Orchestrator Response:</h3>
-                <p>{result}</p>
-            </div>
-            """,
-                unsafe_allow_html=True,
-            )
+                result = orchestrator.orchestrate(user_input)
+                execution_time = time.time() - start_time
 
-            # Return basic metrics
-            return {
-                "execution_time": execution_time,
-                "tool_calls": 0,
-                "cache_hits": 0,
-                "llm_calls": 0,
-            }
+                progress_placeholder.progress(1.0, "✅ Complete!")
+
+                # Display result
+                output_placeholder.markdown(
+                    f"""
+                <div class="success-box">
+                    <h3>🔀 Orchestrator Response:</h3>
+                    <p>{result}</p>
+                </div>
+                """,
+                    unsafe_allow_html=True,
+                )
+
+                # Return basic metrics
+                return {
+                    "execution_time": execution_time,
+                    "tool_calls": 0,
+                    "cache_hits": 0,
+                    "llm_calls": 0,
+                }
+            finally:
+                # Clean up temporary config file
+                if os.path.exists(temp_config_path):
+                    os.remove(temp_config_path)
 
         except Exception as e:
             progress_placeholder.empty()
