@@ -130,9 +130,9 @@ streamlit run streamlit_app.py
 #### **🌟 Web Interface Features:**
 
 **🔧 Configuration Management:**
-- 🔑 **Secure API Key Setup** - Masked input with validation
+- 🔒 **Session-Only API Keys** - Secure browser session storage (never saved to server)
 - ⚙️ **Model Selection** - Choose from GPT-4, Claude, Gemini, and more
-- 💾 **Auto-Save Config** - Automatically updates `config.yaml`
+- 🛡️ **Maximum Security** - Your API key is private and automatically cleared
 
 **🚀 Execution Modes (Matches CLI exactly):**
 - 🔄 **Sync Single Agent** - Equivalent to `python main.py`
@@ -151,6 +151,7 @@ streamlit run streamlit_app.py
 - 📱 **Mobile Optimized** - Works perfectly on all devices
 - 🎭 **Visual Feedback** - Color-coded status indicators and animations
 - 🔍 **Easy Navigation** - Intuitive interface with clear sections
+- 🔒 **Privacy First** - API keys never leave your browser session
 
 **📈 Performance Comparison:**
 - 📊 **Side-by-side Metrics** - Compare Async vs Sync performance
