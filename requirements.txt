@@ -3,3 +3,9 @@ requests
 beautifulsoup4
 pyyaml
 ddgs
+aiohttp>=3.9.0
+aiofiles>=23.0.0
+asyncio-throttle>=1.0.2
+cachetools>=5.3.0
+uvloop>=0.19.0; sys_platform != "win32"
+colorama>=0.4.6
