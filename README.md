@@ -134,11 +134,11 @@ streamlit run streamlit_app.py
 - ⚙️ **Model Selection** - Choose from GPT-4, Claude, Gemini, and more
 - 💾 **Auto-Save Config** - Automatically updates `config.yaml`
 
-**🚀 Execution Options:**
-- ⚡ **Async Mode** - High-performance with connection pooling (recommended)
-- 🔄 **Sync Mode** - Original implementation for comparison
-- 👤 **Single Agent** - Direct AI interaction with tools
-- 🔀 **Multi-Agent** - 4 parallel agents for complex analysis
+**🚀 Execution Modes (Matches CLI exactly):**
+- 🔄 **Sync Single Agent** - Equivalent to `python main.py`
+- ⚡ **Async Single Agent** - Equivalent to `python main_async.py` (recommended)
+- 🔄 **Sync Multi-Agent** - Equivalent to `python make_it_heavy.py`
+- ⚡ **Async Multi-Agent** - Equivalent to `python make_it_heavy_async.py`
 
 **📊 Real-time Monitoring:**
 - 🎯 **Live Progress Bars** - See execution status in real-time

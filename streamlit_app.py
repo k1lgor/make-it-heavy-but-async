@@ -233,23 +233,29 @@ class StreamlitApp:
             if self.save_config(self.config):
                 st.sidebar.success(f"✅ Model updated to {selected_model}")
 
-        # Execution Mode
-        st.sidebar.subheader("⚡ Execution Mode")
-        execution_mode = st.sidebar.radio(
-            "Choose execution mode:",
-            options=["🚀 Async (Recommended)", "🔄 Sync (Original)"],
-            help="Async mode is 2-3x faster with better UX",
+        # Execution Mode Selection
+        st.sidebar.subheader("🚀 Choose Execution Mode")
+        execution_options = [
+            "🔄 Sync Single Agent",
+            "⚡ Async Single Agent",
+            "🔄 Sync Multi-Agent",
+            "⚡ Async Multi-Agent",
+        ]
+
+        selected_option = st.sidebar.radio(
+            "Select mode:",
+            options=execution_options,
+            index=1,  # Default to async single agent
+            help="Choose the execution mode that matches the CLI commands",
         )
 
-        # Agent Type
-        st.sidebar.subheader("🤖 Agent Type")
-        agent_type = st.sidebar.radio(
-            "Choose agent type:",
-            options=["👤 Single Agent", "🔀 Multi-Agent Orchestrator"],
-            help="Single agent for simple tasks, orchestrator for complex analysis",
-        )
+        # Performance recommendation
+        if "Async" in selected_option:
+            st.sidebar.success("✅ Recommended: 2-3x faster performance!")
+        else:
+            st.sidebar.info("ℹ️ Original sync version for comparison")
 
-        return execution_mode, agent_type
+        return selected_option
 
     def render_performance_metrics(self, metrics_data):
         """Render performance metrics visualization"""
@@ -501,9 +507,12 @@ class StreamlitApp:
             )
             return None
 
-    def render_main_interface(self, execution_mode, agent_type):
+    def render_main_interface(self, selected_option):
         """Render the main interface"""
         st.header("💬 AI Agent Interface")
+
+        # Show selected execution mode
+        st.info(f"🚀 **Selected Mode:** {selected_option}")
 
         # Input section
         user_input = st.text_area(
@@ -535,35 +544,35 @@ class StreamlitApp:
                 output_placeholder = st.empty()
                 metrics_placeholder = st.empty()
 
-                # Determine execution method
-                is_async = "Async" in execution_mode
-                is_orchestrator = "Multi-Agent" in agent_type
-
+                # Determine execution method based on selected option
                 try:
-                    if is_async and is_orchestrator:
-                        # Async orchestrator
-                        metrics = asyncio.run(
-                            self.run_async_orchestrator(
-                                user_input, progress_placeholder, output_placeholder
-                            )
-                        )
-                    elif is_async and not is_orchestrator:
-                        # Async single agent
+                    if "Async Single Agent" in selected_option:
+                        # main_async.py equivalent
                         metrics = asyncio.run(
                             self.run_async_agent(
                                 user_input, progress_placeholder, output_placeholder
                             )
                         )
-                    elif not is_async and is_orchestrator:
-                        # Sync orchestrator
+                    elif "Sync Single Agent" in selected_option:
+                        # main.py equivalent
+                        metrics = self.run_sync_agent(
+                            user_input, progress_placeholder, output_placeholder
+                        )
+                    elif "Async Multi-Agent" in selected_option:
+                        # make_it_heavy_async.py equivalent
+                        metrics = asyncio.run(
+                            self.run_async_orchestrator(
+                                user_input, progress_placeholder, output_placeholder
+                            )
+                        )
+                    elif "Sync Multi-Agent" in selected_option:
+                        # make_it_heavy.py equivalent
                         metrics = self.run_sync_orchestrator(
                             user_input, progress_placeholder, output_placeholder
                         )
                     else:
-                        # Sync single agent
-                        metrics = self.run_sync_agent(
-                            user_input, progress_placeholder, output_placeholder
-                        )
+                        st.error("❌ Unknown execution mode selected")
+                        return
 
                     # Clear progress and show metrics
                     progress_placeholder.empty()
@@ -645,10 +654,10 @@ class StreamlitApp:
         self.render_header()
 
         # Sidebar configuration
-        execution_mode, agent_type = self.render_sidebar()
+        selected_option = self.render_sidebar()
 
         # Main interface
-        self.render_main_interface(execution_mode, agent_type)
+        self.render_main_interface(selected_option)
 
         # Information section
         self.render_info_section()
