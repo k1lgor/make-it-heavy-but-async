@@ -95,24 +95,80 @@ uv pip install -r requirements.txt
 ```
 
 3. **Configure API key:**
-```bash
-# Edit config.yaml and replace YOUR API KEY HERE with your OpenRouter API key
-  api_key: "API KEY"
 
+**Option A: Use the Web Interface (Easiest)**
+```bash
+streamlit run streamlit_app.py
+# Then use the sidebar to configure your API key securely
+```
+
+**Option B: Edit config.yaml directly**
+```bash
+# Edit config.yaml and replace YOUR API KEY with your OpenRouter API key
+openrouter:
+  api_key: "your-openrouter-api-key-here"
+```
+
+**Option C: Test your API key**
+```bash
+python test_api_key.py  # Verify your API key is working
 ```
 
 ## 🎯 Usage
 
-### Single Agent Mode
+### 🌐 **Web Interface (Recommended)**
+
+> **🚀 LIVE DEMO:** [https://make-it-heavy-but-async.streamlit.app/](https://make-it-heavy-but-async.streamlit.app/)
+> 
+> **No installation required!** Try the full system directly in your browser.
+
+**Run locally:**
+```bash
+streamlit run streamlit_app.py
+```
+
+#### **🌟 Web Interface Features:**
+
+**🔧 Configuration Management:**
+- 🔑 **Secure API Key Setup** - Masked input with validation
+- ⚙️ **Model Selection** - Choose from GPT-4, Claude, Gemini, and more
+- 💾 **Auto-Save Config** - Automatically updates `config.yaml`
+
+**🚀 Execution Options:**
+- ⚡ **Async Mode** - High-performance with connection pooling (recommended)
+- 🔄 **Sync Mode** - Original implementation for comparison
+- 👤 **Single Agent** - Direct AI interaction with tools
+- 🔀 **Multi-Agent** - 4 parallel agents for complex analysis
+
+**📊 Real-time Monitoring:**
+- 🎯 **Live Progress Bars** - See execution status in real-time
+- 📈 **Performance Metrics** - Execution time, tool calls, cache hits
+- 📉 **Interactive Charts** - Plotly visualizations of performance history
+- 🏆 **Success Tracking** - Monitor query success rates over time
+
+**🎨 User Experience:**
+- 🌈 **Beautiful UI** - Modern gradient styling and responsive design
+- 📱 **Mobile Optimized** - Works perfectly on all devices
+- 🎭 **Visual Feedback** - Color-coded status indicators and animations
+- 🔍 **Easy Navigation** - Intuitive interface with clear sections
+
+**📈 Performance Comparison:**
+- 📊 **Side-by-side Metrics** - Compare Async vs Sync performance
+- 🎯 **Efficiency Tracking** - Cache hit rates and optimization benefits
+- ⏱️ **Execution History** - Track performance improvements over time
+
+### 💻 **Command Line Interface**
+
+#### Single Agent Mode
 
 Run a single intelligent agent with full tool access:
 
 ```bash
-# Standard synchronous mode
-uv run main.py
-
 # High-performance async mode (recommended)
 uv run main_async.py
+
+# Standard synchronous mode
+uv run main.py
 ```
 
 **What it does:**
@@ -127,16 +183,16 @@ User: Research the latest developments in AI and summarize them
 Agent: [Uses search tool, analyzes results, provides summary]
 ```
 
-### Grok heavy Mode (Multi-Agent Orchestration)
+#### Grok heavy Mode (Multi-Agent Orchestration)
 
 Emulate Grok heavy's deep analysis with 4 parallel intelligent agents:
 
 ```bash
-# Standard synchronous mode
-uv run make_it_heavy.py
-
 # High-performance async mode (recommended)
 uv run make_it_heavy_async.py
+
+# Standard synchronous mode
+uv run make_it_heavy.py
 ```
 
 **How Make It heavy works:**
