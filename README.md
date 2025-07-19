@@ -609,7 +609,9 @@ make-it-heavy-async/
 
 MIT License with Commercial Attribution Requirement
 
-**For products with 100K+ users**: Please include attribution to Pietro Schirano and mention the "Make It heavy" framework in your documentation or credits.
+**For products with 100K+ users**: "Uses Make It Heavy multi-agent system created by Pietro Schirano, 
+with async performance enhancements by Plamen Ivanov"
+
 
 See [LICENSE](LICENSE) file for full details.
 
