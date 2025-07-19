@@ -17,7 +17,7 @@ import yaml
 import asyncio
 import aiohttp
 import time
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Any
 from openai import AsyncOpenAI
 from tools import discover_tools
 from functools import lru_cache

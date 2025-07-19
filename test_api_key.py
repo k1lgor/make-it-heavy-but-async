@@ -6,7 +6,6 @@ Quick script to test if your OpenRouter API key is working
 
 import yaml
 import requests
-import json
 from utils import ColorPrint
 
 

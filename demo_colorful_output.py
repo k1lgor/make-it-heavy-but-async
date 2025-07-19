@@ -214,11 +214,11 @@ async def main():
     # Comparison
     demo_comparison()
 
-    print(f"\n🚀 Ready to try the real thing?")
-    print(f"Run these commands:")
-    print(f"  • uv run main_async.py          (Single agent)")
-    print(f"  • uv run make_it_heavy_async.py (Multi-agent)")
-    print(f"  • python benchmark_comparison.py (Performance test)")
+    print("\n🚀 Ready to try the real thing?")
+    print("Run these commands:")
+    print("  • uv run main_async.py          (Single agent)")
+    print("  • uv run make_it_heavy_async.py (Multi-agent)")
+    print("  • python benchmark_comparison.py (Performance test)")
 
 
 if __name__ == "__main__":

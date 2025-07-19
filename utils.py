@@ -10,7 +10,7 @@ Features cross-platform support and consistent emoji-rich styling.
 Usage: from utils import ColorPrint
 """
 
-from colorama import init, Fore, Back, Style
+from colorama import init, Fore, Style
 
 # Initialize colorama for cross-platform colored output
 init(autoreset=True)
