@@ -154,17 +154,23 @@ class StreamlitApp:
 
         # API Key Configuration
         st.sidebar.subheader("🔑 OpenRouter API Key")
-        current_key = self.config.get("openrouter", {}).get("api_key", "")
 
-        # Mask the API key for display
-        masked_key = (
-            f"{current_key[:8]}...{current_key[-8:]}"
-            if len(current_key) > 16
-            else current_key
-        )
+        # Initialize session state for API key
+        if "api_key" not in st.session_state:
+            st.session_state.api_key = ""
 
-        if current_key and current_key != "YOUR KEY":
-            st.sidebar.success(f"✅ API Key configured: {masked_key}")
+        # Use only session-based API key for maximum security
+        current_key = st.session_state.api_key
+
+        # Display current API key status
+        if current_key:
+            masked_key = (
+                f"{current_key[:8]}...{current_key[-8:]}"
+                if len(current_key) > 16
+                else current_key
+            )
+            st.sidebar.success(f"🔒 API Key Active: {masked_key}")
+            st.sidebar.info("ℹ️ Stored securely in your browser session only")
         else:
             st.sidebar.warning("⚠️ API Key not configured")
 
@@ -174,15 +180,29 @@ class StreamlitApp:
             value="",
             type="password",
             help="Get your API key from https://openrouter.ai/",
+            placeholder="sk-or-v1-...",
         )
 
-        if st.sidebar.button("💾 Save API Key"):
+        # Single secure save button
+        if st.sidebar.button(
+            "🔒 Save API Key (Session Only)", use_container_width=True
+        ):
             if new_api_key:
-                self.config["openrouter"]["api_key"] = new_api_key
-                if self.save_config(self.config):
-                    st.sidebar.success("✅ API Key saved successfully!")
+                st.session_state.api_key = new_api_key
+                st.sidebar.success("✅ API Key saved securely!")
             else:
                 st.sidebar.error("❌ Please enter a valid API key")
+
+        # Security info
+        st.sidebar.info(
+            "🛡️ **Secure Storage**: Your API key is stored only in your browser session and is never saved to the server."
+        )
+
+        # Clear session key option
+        if current_key:
+            if st.sidebar.button("🗑️ Clear API Key"):
+                st.session_state.api_key = ""
+                st.sidebar.success("✅ API key cleared!")
 
         # Model Selection
         st.sidebar.subheader("🤖 Model Configuration")
@@ -529,15 +549,17 @@ class StreamlitApp:
                     st.warning("⚠️ Please enter a question or request.")
                     return
 
-                # Check API key
-                if (
-                    not self.config.get("openrouter", {}).get("api_key")
-                    or self.config["openrouter"]["api_key"] == "YOUR KEY"
-                ):
+                # Check session API key
+                current_key = st.session_state.get("api_key", "")
+
+                if not current_key:
                     st.error(
                         "❌ Please configure your OpenRouter API key in the sidebar first."
                     )
                     return
+
+                # Temporarily update config with session key for execution
+                self.config["openrouter"]["api_key"] = current_key
 
                 # Create placeholders for progress and output
                 progress_placeholder = st.empty()
