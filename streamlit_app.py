@@ -191,12 +191,32 @@ class StreamlitApp:
         )
 
         model_options = [
-            "openai/gpt-4o-mini",
-            "openai/gpt-4o",
             "anthropic/claude-3.5-sonnet",
+            "anthropic/claude-opus-4",
+            "anthropic/claude-sonnet-4",
+            "deepseek/deepseek-chat-v3-0324",
+            "deepseek/deepseek-r1-0528",
+            "deepseek/deepseek-r1-0528:free",
+            "deepseek/deepseek-r1-0528-qwen3-8b",
+            "deepseek/deepseek-r1-0528-qwen3-8b:free",
+            "deepseek/deepseek-r1-distill-qwen-7b",
             "google/gemini-2.0-flash-exp",
+            "google/gemini-2.5-flash",
+            "google/gemini-2.5-flash-lite-preview-06-17",
+            "google/gemini-2.5-pro",
             "meta-llama/llama-3.1-70b-instruct",
+            "moonshotai/kimi-dev-72b:freex-ai/grok-4",
+            "moonshotai/kimi-k2",
+            "moonshotai/kimi-k2:free",
+            "openai/gpt-4.1",
+            "openai/gpt-4.1-mini",
+            "openai/gpt-4o",
+            "openai/gpt-4o-mini",
             "qwen/qwen-turbo",
+            "tngtech/deepseek-r1t2-chimera:free",
+            "x-ai/grok-3",
+            "x-ai/grok-3-mini",
+            "x-ai/grok-4",
         ]
 
         selected_model = st.sidebar.selectbox(
